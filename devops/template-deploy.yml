@@ -28,7 +28,7 @@ jobs:
       condition: and(succeeded(), eq('${{ parameters.deployInfrastructure }}', 'true'))
       displayName: Deploy Infrastructure to ${{ parameters.resourceGroupName }}
       inputs:
-        azureSubscription: $(azureServiceConnection)
+        azureSubscription: ${{ parameters.azureServiceConnection }}
         scriptType: bash
         scriptLocation: inlineScript
         inlineScript: |
