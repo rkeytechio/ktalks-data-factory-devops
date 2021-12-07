@@ -33,5 +33,5 @@ jobs:
         scriptLocation: inlineScript
         inlineScript: |
           az --version
-          az group create --name $(resourceGroupName) --location $(resourceGroupNameLocation)
-          az deployment group create --resource-group $(resourceGroupName) --template-file $(templateFile)
+          az group create --name ${{ parameters.resourceGroupName }} --location ${{ parameters.resourceGroupNameLocation }}
+          az deployment group create --resource-group ${{ parameters.resourceGroupName }} --template-file $(templateFile)
