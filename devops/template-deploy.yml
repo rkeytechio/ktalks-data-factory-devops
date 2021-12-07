@@ -15,8 +15,8 @@ jobs:
   displayName: Deploy Infrastructure
   variables:
     - group: 'ktalk-${{ parameters.environmentName }}-settings'
-    vmImageName: 'ubuntu-latest'
-    templateFile: '$(System.DefaultWorkingDirectory)/azure/main.bicep'
+      vmImageName: 'ubuntu-latest'
+      templateFile: '$(System.DefaultWorkingDirectory)/azure/main.bicep'
   pool:
     vmImage: $(vmImageName)
   steps:
