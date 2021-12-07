@@ -2,10 +2,10 @@
 param location string = resourceGroup().location
 
 @description('Name of the App storage account that contains the input/output data.')
-param appStorageAccountName string = 'appstg${uniqueString(resourceGroup().id)}'
+param appStorageAccountName string = 'ktalkstorage${uniqueString(resourceGroup().id)}'
 
-@description('Name of the Azure storage account that contains the input/output data.')
-param functionAppStorageAccountName string = 'fastg${uniqueString(resourceGroup().id)}'
+@description('Data Factory Name')
+param dataFactoryName string = 'ktalk-adf-${uniqueString(resourceGroup().id)}'
 
 resource sourceStorageAccount 'Microsoft.Storage/storageAccounts@2021-04-01' = {
   name: appStorageAccountName
@@ -16,11 +16,10 @@ resource sourceStorageAccount 'Microsoft.Storage/storageAccounts@2021-04-01' = {
   kind: 'StorageV2'
 }
 
-resource targetStorageAccount 'Microsoft.Storage/storageAccounts@2021-04-01' = {
-  name: functionAppStorageAccountName
+resource dataFactoryName_resource 'Microsoft.DataFactory/factories@2018-06-01' = {
+  name: dataFactoryName
   location: location
-  sku: {
-    name: 'Standard_LRS'
+  identity: {
+    type: 'SystemAssigned'
   }
-  kind: 'StorageV2'
 }
