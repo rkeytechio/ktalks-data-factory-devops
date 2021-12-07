@@ -1,0 +1,38 @@
+parameters:
+- name: azureServiceConnection
+  displayName: Azure Service Connection?
+  type: string
+- name: resourceGroupName
+  displayName: Azure Service Connection?
+  type: string
+- name: deployInfrastructure
+  displayName: Should Deploy Infrastructure?
+  type: boolean
+  default: true
+- name: resourceGroupNameLocation
+  displayName: Azure Resource Group Location?
+  type: string
+  default: australiasoutheast
+
+variables:
+  vmImageName: 'ubuntu-latest'
+  templateFile: '$(System.DefaultWorkingDirectory)/azure/main.bicep'
+  
+jobs:
+- job: DeployInfrastructure
+  displayName: Deploy Infrastructure
+  pool:
+    vmImage: $(vmImageName)
+  steps:
+    # Build
+    - task: AzureCLI@2
+      condition: and(succeeded(), eq('${{ parameters.deployInfrastructure }}', 'true'))
+      displayName: Deploy Infrastructure to ${{ parameters.resourceGroupName }}
+      inputs:
+        azureSubscription: $(azureServiceConnection)
+        scriptType: bash
+        scriptLocation: inlineScript
+        inlineScript: |
+          az --version
+          az group create --name $(resourceGroupName) --location $(resourceGroupNameLocation)
+          az deployment group create --resource-group $(resourceGroupName) --template-file $(templateFile)
