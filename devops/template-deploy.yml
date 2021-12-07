@@ -14,13 +14,12 @@ parameters:
   type: string
   default: australiasoutheast
 
-variables:
-  vmImageName: 'ubuntu-latest'
-  templateFile: '$(System.DefaultWorkingDirectory)/azure/main.bicep'
-  
 jobs:
 - job: DeployInfrastructure
   displayName: Deploy Infrastructure
+  variables:
+    vmImageName: 'ubuntu-latest'
+    templateFile: '$(System.DefaultWorkingDirectory)/azure/main.bicep'
   pool:
     vmImage: $(vmImageName)
   steps:
