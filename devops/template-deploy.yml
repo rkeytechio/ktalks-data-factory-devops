@@ -15,10 +15,8 @@ jobs:
   displayName: Deploy Infrastructure
   variables:
     - group: 'ktalk-${{ parameters.environmentName }}-settings'
-      vmImageName: 'ubuntu-latest'
-      templateFile: '$(System.DefaultWorkingDirectory)/azure/main.bicep'
   pool:
-    vmImage: $(vmImageName)
+    vmImage: ubuntu-latest
   steps:
     # Deploy Infrastructure
     - task: AzureCLI@2
@@ -31,4 +29,4 @@ jobs:
         inlineScript: |
           az --version
           az group create --name $(AzureResourceGroupName) --location $(AzureResourceGroupLocation)
-          az deployment group create --resource-group $(AzureResourceGroupName) --template-file $(templateFile)
+          az deployment group create --resource-group $(AzureResourceGroupName) --template-file $(System.DefaultWorkingDirectory)/azure/main.bicep
