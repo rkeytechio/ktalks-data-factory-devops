@@ -2,7 +2,7 @@
 param location string = resourceGroup().location
 
 @description('Name of the App storage account that contains the input/output data.')
-param appStorageAccountName string = 'ktalkstorage${uniqueString(resourceGroup().id)}'
+param appStorageAccountName string = 'ktalkstg${uniqueString(resourceGroup().id)}'
 
 @description('Data Factory Name')
 param dataFactoryName string = 'ktalk-adf-${uniqueString(resourceGroup().id)}'
