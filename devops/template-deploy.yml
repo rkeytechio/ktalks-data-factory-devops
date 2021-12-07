@@ -3,7 +3,7 @@ parameters:
   displayName: Azure Service Connection?
   type: string
 - name: resourceGroupName
-  displayName: Azure Service Connection?
+  displayName: Azure Resource Group?
   type: string
 - name: deployInfrastructure
   displayName: Should Deploy Infrastructure?
