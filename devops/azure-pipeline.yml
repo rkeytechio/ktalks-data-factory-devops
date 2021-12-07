@@ -10,5 +10,5 @@ stages:
     jobs:
       - template: template-deploy.yml
         parameters:
-          azureServiceConnection: K-Talk-Subscription
+          azureServiceConnection: KTalkSubscription
           resourceGroupName: RG-KTALK-DFDEVOPS-DEV
