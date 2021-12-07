@@ -5,8 +5,13 @@ pool:
   vmImage: 'ubuntu-latest'
 
 stages:
+  - stage: Build
+    displayName: Build K-Talk Solution
+    jobs:
+      - template: template-build.yml
+
   - stage: Deploy
-    displayName: Deploy Solution
+    displayName: Deploy K-Talk Solution
     jobs:
       - template: template-deploy.yml
         parameters:

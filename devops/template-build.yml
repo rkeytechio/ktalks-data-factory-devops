@@ -1,0 +1,17 @@
+parameters:
+  - name: skipPublish
+    type: boolean
+    default: true
+jobs:
+- job: PublishInfrastructureArtifacts
+  displayName: Publish Infrastructure Artifacts
+  pool:
+    vmImage: ubuntu-latest
+  steps:
+    # Publish the Infrastructure artifacts.
+    - task: PublishPipelineArtifact@1
+      condition: and(succeeded(), eq('${{ parameters.skipPublish }}', 'true'))
+      inputs:
+        targetPath: '$(System.DefaultWorkingDirectory)/azure'
+        artifact: 'azure'
+        publishLocation: 'pipeline'

@@ -11,22 +11,26 @@ parameters:
   default: true
 
 jobs:
-- job: DeployInfrastructure
-  displayName: Deploy Infrastructure
+- deployment: Deploy
+  displayName: Deploy to ${{ parameters.environmentName }} Environment
   variables:
     - group: 'ktalk-${{ parameters.environmentName }}-settings'
   pool:
     vmImage: ubuntu-latest
-  steps:
-    # Deploy Infrastructure
-    - task: AzureCLI@2
-      condition: and(succeeded(), eq('${{ parameters.deployInfrastructure }}', 'true'))
-      displayName: Deploy Infrastructure to $(AzureResourceGroupName)
-      inputs:
-        azureSubscription: ${{ parameters.azureServiceConnection }}
-        scriptType: bash
-        scriptLocation: inlineScript
-        inlineScript: |
-          az --version
-          az group create --name $(AzureResourceGroupName) --location $(AzureResourceGroupLocation)
-          az deployment group create --resource-group $(AzureResourceGroupName) --template-file $(System.DefaultWorkingDirectory)/azure/main.bicep
+  environment: ${{ parameters.environmentName }}
+  strategy:
+    runOnce:
+      deploy:
+        steps:
+          # Deploy Infrastructure
+          - task: AzureCLI@2
+            condition: and(succeeded(), eq('${{ parameters.deployInfrastructure }}', 'true'))
+            displayName: Deploy Infrastructure
+            inputs:
+              azureSubscription: ${{ parameters.azureServiceConnection }}
+              scriptType: bash
+              scriptLocation: inlineScript
+              inlineScript: |
+                az --version
+                az group create --name $(AzureResourceGroupName) --location $(AzureResourceGroupLocation)
+                az deployment group create --resource-group $(AzureResourceGroupName) --template-file $(Pipeline.Workspace)/azure/main.bicep
