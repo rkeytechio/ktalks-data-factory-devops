@@ -2,36 +2,33 @@ parameters:
 - name: azureServiceConnection
   displayName: Azure Service Connection?
   type: string
-- name: resourceGroupName
-  displayName: Azure Resource Group?
+- name: environmentName
+  displayName: Azure EnvironmentName?
   type: string
 - name: deployInfrastructure
   displayName: Should Deploy Infrastructure?
   type: boolean
   default: true
-- name: resourceGroupNameLocation
-  displayName: Azure Resource Group Location?
-  type: string
-  default: australiasoutheast
 
 jobs:
 - job: DeployInfrastructure
   displayName: Deploy Infrastructure
   variables:
+    - group: 'ktalk-${{ parameters.environmentName }}-settings'
     vmImageName: 'ubuntu-latest'
     templateFile: '$(System.DefaultWorkingDirectory)/azure/main.bicep'
   pool:
     vmImage: $(vmImageName)
   steps:
-    # Build
+    # Deploy Infrastructure
     - task: AzureCLI@2
       condition: and(succeeded(), eq('${{ parameters.deployInfrastructure }}', 'true'))
-      displayName: Deploy Infrastructure to ${{ parameters.resourceGroupName }}
+      displayName: Deploy Infrastructure to $(AzureResourceGroupName)
       inputs:
-        azureSubscription: ${{ parameters.azureServiceConnection }}
+        azureSubscription: $(AzureServiceConnectionName)
         scriptType: bash
         scriptLocation: inlineScript
         inlineScript: |
           az --version
-          az group create --name ${{ parameters.resourceGroupName }} --location ${{ parameters.resourceGroupNameLocation }}
-          az deployment group create --resource-group ${{ parameters.resourceGroupName }} --template-file $(templateFile)
+          az group create --name $(AzureResourceGroupName) --location $(AzureResourceGroupLocation)
+          az deployment group create --resource-group $(AzureResourceGroupName) --template-file $(templateFile)
